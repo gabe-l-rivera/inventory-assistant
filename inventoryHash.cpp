@@ -68,7 +68,7 @@ void inventoryHash::addItemInfoIndex(int index, string new_item){
         cin.ignore();
         getline(cin, strInfo);
         hash_table[index]->item_distributor = strInfo;
-        cout << endl << "Quantity (per unit): ";
+        cout << endl << "Quantity (how many units?): ";
         cin >> intInfo;
         hash_table[index]->item_quantity = intInfo;
         cout << endl << "Cost (per unit): $";
@@ -85,14 +85,13 @@ void inventoryHash::addItemInfoPtr(item *ptr, string new_item){
          cin.ignore();
         getline(cin, strInfo);
         ptr->item_distributor = strInfo;
-        cout << endl << "Quantity (per unit): ";
+        cout << endl << "Quantity (how many units?): ";
         cin >> intInfo;
         ptr->item_quantity = intInfo;
         cout << endl << "Cost (per unit): $";
         cin >> intInfo;
         ptr->item_cost = intInfo;
 }
-
 
 void inventoryHash::addItem(string new_item){
         int index = hashItem(new_item); // word is hashed and stored in index
@@ -138,15 +137,28 @@ void inventoryHash::printHashTable(){
 }
 
 int main(int argc, char **argv) {
-
+        // Import data via text file
         inventoryHash h_t;
-        // 1. Standard input by user
-        welcomeOption1();
-        vector <string> name_vector;
-        name_vector = enterUserData();
-        //printVector(name_vector);
-        for(int i = 0; i < name_vector.size(); i++)
-                h_t.addItem(name_vector[i]);
-        h_t.printHashTable();
+        if(argv[1] != NULL){
+                ifstream file(argv[1]); // traverse through file and populate an array of the file's words
+                vector <string> getLineVector;
+                string str;
+                while(getline(file, str)){
+                        getLineVector.push_back(str);
+                }
+                for(int i = 0; i < getLineVector.size(); i++){
+                        h_t.addItem(getLineVector[i]); // hash words in word array
+                }
+                h_t.printHashTable();
+        }else{
+        // Standard input by user
+                welcomeOption1();
+                vector <string> name_vector;
+                name_vector = enterUserData();
+                //printVector(name_vector);
+                for(int i = 0; i < name_vector.size(); i++)
+                        h_t.addItem(name_vector[i]);
+                h_t.printHashTable();
+        }
         return 0;
 }
